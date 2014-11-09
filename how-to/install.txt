@@ -1,0 +1,5 @@
+gcc -shared -o libccv.so *.o 3rdparty/dsfmt/*.o 3rdparty/kissfft/*.o 3rdparty/sfmt/*.o 3rdparty/sha1/*.o 3rdparty/sqlite3/*.o -lm -lpng -ljpeg -ltesseract -framework Accelerate
+
+clang myccv_swt.c -o myccv_swt.o -c -fPIC -O3 -ffast-math -Wall -msse2 -fblocks -D HAVE_SSE2 -D HAVE_LIBPNG -D HAVE_LIBJPEG -D HAVE_TESSERACT -D HAVE_ACCELERATE_FRAMEWORK -D USE_DISPATCH
+
+gcc -shared -o libmyccv.so myccv_swt.o libccv.so
