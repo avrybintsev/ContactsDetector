@@ -1,0 +1,1 @@
+ccv_array_t* __attribute__((warn_unused_result)) ccv_swt_detect_words_from_file(const void* filename, ccv_swt_param_t params
