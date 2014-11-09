@@ -70,4 +70,4 @@ ccv_swt_recognize_words_from_file = _libraries['libccv'].myccv_swt_recognize_wor
 ccv_swt_recognize_words_from_file.restype = c_int
 ccv_swt_recognize_words_from_file.argtypes = [c_void_p, ccv_swt_param_t, POINTER(myccv_buffer)]
 
-__all__ = ['ccv_rect_t', 'ccv_array_t', 'ccv_swt_param_t', 'ccv_swt_detect_words_from_file', 'ccv_swt_recognize_words_from_file']
+__all__ = ['ccv_rect_t', 'ccv_array_t', 'ccv_swt_param_t', 'myccv_buffer', 'ccv_swt_detect_words_from_file', 'ccv_swt_recognize_words_from_file']

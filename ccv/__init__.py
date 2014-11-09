@@ -60,6 +60,7 @@ def detect_words_from_file(filename, update_params={}):
 	   [cast(ccv_array_get(words_array, i), POINTER(ccv.ccv_rect_t)).contents for i in xrange(words_array.contents.rnum)]
     ) if status == 0 else []
 
+
 def recognize_words_from_file(filename, update_params={}):
     json_buffer = pointer(ccv.myccv_buffer())
     status = ccv.ccv_swt_recognize_words_from_file(
@@ -67,5 +68,7 @@ def recognize_words_from_file(filename, update_params={}):
         get_default_swt_params(update_params),
         json_buffer,
     )    
-    char_array = (c_char*json_buffer.contents.len).from_address(addressof(json_buffer.contents.data.contents))     
-    return char_array[:json_buffer.contents.len] if status == 0 else ''
+    if status == 0 and json_buffer and json_buffer.contents and json_buffer.contents.data:
+        char_array = (c_char*json_buffer.contents.len).from_address(addressof(json_buffer.contents.data.contents))     
+        return char_array[:json_buffer.contents.len]
+    return ''
