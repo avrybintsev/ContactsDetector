@@ -7,8 +7,8 @@
 liuliu-ccv/lib/config.log
 liuliu-ccv/lib/config.status
 
-base/with/
-base/without/
+images/with/
+images/without/
 
 *.pyc
 
