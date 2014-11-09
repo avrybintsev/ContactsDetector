@@ -33,7 +33,7 @@ int myccv_swt_recognize_words_from_file(const void* filename, const ccv_swt_para
 
 	ccv_array_t* seq = ccv_swt_detect_words(image, params);
 	//float width = image->cols, height = image->rows;
-	if (seq  == 0)
+	if (seq == 0)
 	{
 		ccv_matrix_free(image);
 		return -1;
