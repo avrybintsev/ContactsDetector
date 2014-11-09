@@ -1,5 +1,5 @@
 import os
-from ctypes import CDLL, c_int, c_uint64, c_void_p, c_double, POINTER, Structure
+from ctypes import CDLL, c_int, c_uint64, c_void_p, c_size_t, c_char_p, c_char, c_double, POINTER, Structure
 
 _libraries = {}
 _libraries['libccv'] = CDLL('libmyccv.so')
@@ -54,8 +54,20 @@ ccv_swt_param_t._fields_ = [
     ('breakdown_ratio', c_double),
 ]
 
-ccv_swt_detect_words_from_file = _libraries['libccv'].ccv_swt_detect_words_from_file
+class myccv_buffer(Structure):
+    pass
+myccv_buffer._fields_ = [
+    ('written', c_size_t),
+    ('len', c_size_t),
+    ('data', POINTER(c_char))
+]
+
+ccv_swt_detect_words_from_file = _libraries['libccv'].myccv_swt_detect_words_from_file
 ccv_swt_detect_words_from_file.restype = c_int
 ccv_swt_detect_words_from_file.argtypes = [c_void_p, ccv_swt_param_t, POINTER(POINTER(ccv_array_t))]
 
-__all__ = ['ccv_rect_t', 'ccv_array_t', 'ccv_swt_param_t', 'ccv_swt_detect_words_from_file']
+ccv_swt_recognize_words_from_file = _libraries['libccv'].myccv_swt_recognize_words_from_file
+ccv_swt_recognize_words_from_file.restype = c_int
+ccv_swt_recognize_words_from_file.argtypes = [c_void_p, ccv_swt_param_t, POINTER(myccv_buffer)]
+
+__all__ = ['ccv_rect_t', 'ccv_array_t', 'ccv_swt_param_t', 'ccv_swt_detect_words_from_file', 'ccv_swt_recognize_words_from_file']

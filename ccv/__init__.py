@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from collections import namedtuple
-from ctypes import create_string_buffer, c_double, cast, POINTER, pointer
+from ctypes import create_string_buffer, c_double, c_char, cast, POINTER, pointer, addressof
 import ccv
 import os
 
@@ -49,7 +51,7 @@ def get_default_swt_params(update_params={}):
 def detect_words_from_file(filename, update_params={}):
     words_array = pointer(ccv.ccv_array_t())
     status = ccv.ccv_swt_detect_words_from_file(
-        create_string_buffer(filename, len(filename)+2), 
+        create_string_buffer(filename, len(filename)+1), 
         get_default_swt_params(update_params),
         pointer(words_array),
     )
@@ -57,3 +59,13 @@ def detect_words_from_file(filename, update_params={}):
 	   lambda item: Word(x=item.x, y=item.y, width=item.width, height=item.height),
 	   [cast(ccv_array_get(words_array, i), POINTER(ccv.ccv_rect_t)).contents for i in xrange(words_array.contents.rnum)]
     ) if status == 0 else []
+
+def recognize_words_from_file(filename, update_params={}):
+    json_buffer = pointer(ccv.myccv_buffer())
+    status = ccv.ccv_swt_recognize_words_from_file(
+        create_string_buffer(filename, len(filename)+1),
+        get_default_swt_params(update_params),
+        json_buffer,
+    )    
+    char_array = (c_char*json_buffer.contents.len).from_address(addressof(json_buffer.contents.data.contents))     
+    return char_array[:json_buffer.contents.len] if status == 0 else ''
