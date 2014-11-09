@@ -55,7 +55,7 @@ ccv_swt_param_t._fields_ = [
 ]
 
 ccv_swt_detect_words_from_file = _libraries['libccv'].ccv_swt_detect_words_from_file
-ccv_swt_detect_words_from_file.restype = POINTER(ccv_array_t)
-ccv_swt_detect_words_from_file.argtypes = [c_void_p, ccv_swt_param_t]
+ccv_swt_detect_words_from_file.restype = c_int
+ccv_swt_detect_words_from_file.argtypes = [c_void_p, ccv_swt_param_t, POINTER(POINTER(ccv_array_t))]
 
 __all__ = ['ccv_rect_t', 'ccv_array_t', 'ccv_swt_param_t', 'ccv_swt_detect_words_from_file']

@@ -1,5 +1,5 @@
 from collections import namedtuple
-from ctypes import create_string_buffer, c_double, cast, POINTER
+from ctypes import create_string_buffer, c_double, cast, POINTER, pointer
 import ccv
 import os
 
@@ -47,13 +47,13 @@ def get_default_swt_params(update_params={}):
 
 
 def detect_words_from_file(filename, update_params={}):
-    words_array = ccv.ccv_swt_detect_words_from_file(
+    words_array = pointer(ccv.ccv_array_t())
+    status = ccv.ccv_swt_detect_words_from_file(
         create_string_buffer(filename, len(filename)+2), 
-        get_default_swt_params(update_params)
+        get_default_swt_params(update_params),
+        pointer(words_array),
     )
     return map(
 	   lambda item: Word(x=item.x, y=item.y, width=item.width, height=item.height),
 	   [cast(ccv_array_get(words_array, i), POINTER(ccv.ccv_rect_t)).contents for i in xrange(words_array.contents.rnum)]
-    )
-
-
+    ) if status == 0 else []
