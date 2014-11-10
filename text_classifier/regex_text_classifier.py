@@ -24,7 +24,7 @@ class RegexTextClassifier(TextClassifier):
 
         _text = preprocess_text(text)
         for pattern in regex:
-            if pattern.match(_text):
+            if pattern.search(_text):
                 return self.target_class
         return self.second_class
         
