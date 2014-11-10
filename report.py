@@ -28,7 +28,7 @@ def excel_report(results, file_name='results.xls'):
 		('Type II Errors', stats.err2t),
 		('Precision', stats.precision),
 		('Recall', stats.recall),
-		('F1-score', stats.recall),
+		('F1-score', stats.f1),
 	)))
 
 	wb.save(file_name)
