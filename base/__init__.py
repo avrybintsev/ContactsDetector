@@ -20,7 +20,7 @@ class Base:
 		return {k: len(v) for k, v in self.files.iteritems()}
 
 	def get_class_names(self):
-		return (k for k in self.files.iterkeys())
+		return [k for k in self.files.iterkeys()]
 
 	def get_class(self, name):
 		return self.files.get(name)
