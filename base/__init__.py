@@ -13,6 +13,8 @@ class Base:
 		'''
 		self.dirs = dirs
 		self.files = {
+			# iterator required for directories with lots of files
+			# unfortunatly, listdir returns list, and os.walk() uses listdir() internally :(
 			k: [join(v, f) for f in listdir(v) if isfile(join(v, f)) and not f.startswith('.')] for k, v in dirs.iteritems()
 		}
 
@@ -24,6 +26,12 @@ class Base:
 
 	def get_class(self, name):
 		return self.files.get(name)
+
+	def iter_tuples(self):
+		return ((class_name, file_name) for class_name, files in self.files.iteritems() for file_name in files)
+
+	def iter_dicts(self):
+		return ({'file_name': file_name, 'class_name': class_name} for class_name, files in self.files.iteritems() for file_name in files)
 
 	def random_split(self, parts=5):
 		indicies = {k: range(len(v)) for k, v in self.files.iteritems()}
