@@ -15,6 +15,7 @@ class RegexTextClassifier(TextClassifier):
             re.compile(r'\+7'),
             re.compile(r'@'),
             re.compile(r'\d\d-\d\d-\d\d'),
+            re.compile(r'\d{8,11}'),
             re.compile(r'ww'),
             re.compile(r'\.\w\w'),
             re.compile(r'\(\d\d\d\)'),
