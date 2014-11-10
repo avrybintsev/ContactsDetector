@@ -2,11 +2,12 @@
 
 from collections import namedtuple
 from ctypes import create_string_buffer, c_double, c_char, cast, POINTER, pointer, addressof
+import json
 import ccv
 import os
 
 
-Word = namedtuple('Word', ('x', 'y', 'width', 'height'))
+Word = namedtuple('Word', ('x', 'y', 'width', 'height', 'word'))
 
 
 def ccv_array_get(array, i):
@@ -56,12 +57,12 @@ def detect_words_from_file(filename, update_params={}):
         pointer(words_array),
     )
     return map(
-	   lambda item: Word(x=item.x, y=item.y, width=item.width, height=item.height),
+	   lambda item: Word(x=item.x, y=item.y, width=item.width, height=item.height, word=None),
 	   [cast(ccv_array_get(words_array, i), POINTER(ccv.ccv_rect_t)).contents for i in xrange(words_array.contents.rnum)]
     ) if status == 0 else []
 
 
-def recognize_words_from_file(filename, update_params={}):
+def _recognize_words_from_file_to_json(filename, update_params={}):
     json_buffer = pointer(ccv.myccv_buffer())
     status = ccv.ccv_swt_recognize_words_from_file(
         create_string_buffer(filename, len(filename)+1),
@@ -71,4 +72,13 @@ def recognize_words_from_file(filename, update_params={}):
     if status == 0 and json_buffer and json_buffer.contents and json_buffer.contents.data:
         char_array = (c_char*json_buffer.contents.len).from_address(addressof(json_buffer.contents.data.contents))     
         return char_array[:json_buffer.contents.len]
-    return ''
+    return '[]'
+
+def recognize_words_from_file(filename, update_params={}):
+    json_string = _recognize_words_from_file_to_json(filename, update_params)
+    try:
+        words = json.loads(json_string)
+    except:
+        words = []
+    return map(lambda item: Word(x=item.get(u'x'), y=item.get(u'y'), width=item.get(u'width'), height=item.get(u'height'), 
+        word=item.get(u'word').encode('utf-8')), words)
