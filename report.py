@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import xlwt
+from collections import OrderedDict
 
 from stats import Stats
 
@@ -20,14 +21,14 @@ def excel_report(results, file_name='results.xls'):
 			ws.write(current, 1, v)
 			current += 1
 
-	write_pairs({
-		'Total': stats.total,
-		'Correct': stats.correct,
-		'Type I Errors': stats.err1t,
-		'Type II Errors': stats.err2t,
-		'Precision': stats.precision,
-		'Recall': stats.recall,
-		'F1-score': stats.recall,
-	})
+	write_pairs(OrderedDict((
+		('Total', stats.total),
+		('Correct', stats.correct),
+		('Type I Errors', stats.err1t),
+		('Type II Errors', stats.err2t),
+		('Precision', stats.precision),
+		('Recall', stats.recall),
+		('F1-score', stats.recall),
+	)))
 
 	wb.save(file_name)
